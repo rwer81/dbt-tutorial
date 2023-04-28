@@ -9,7 +9,7 @@ RUN pip3 install -r requirements.txt
 
 COPY . .
 
-ENV DBT_DIR $dbt_project_name/case_study/
+ENV DBT_DIR /$dbt_project_name/case_study/
 ENV DBT_PROFILES_DIR=$DBT_DIR/profiles/
 ENV GOOGLE_APPLICATION_CREDENTIALS=/usr/app/auth/gcp-service-account.json
 ENV PORT 8080
