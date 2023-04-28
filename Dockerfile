@@ -19,4 +19,4 @@ ENV HOST 0.0.0.0
 
 WORKDIR /$dbt_project_name/dbt_rest_api
 
-CMD exec gunicorn --bind :$PORT --workers 1 --threads 1 --timeout 0 main:app
+CMD ["python3", "main.py"]
