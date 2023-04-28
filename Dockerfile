@@ -2,10 +2,12 @@ ARG dbt_project_name=dbt_works
 
 FROM python:3.10-alpine
 
+ENV PYTHONUNBUFFERED True
+
 WORKDIR /$dbt_project_name
 
 COPY requirements.txt requirements.txt
-RUN pip3 install -r requirements.txt
+RUN pip3 install --no-cache-dir -r requirements.txt
 
 COPY . .
 
@@ -17,4 +19,4 @@ ENV HOST 0.0.0.0
 
 WORKDIR /$dbt_project_name/dbt_rest_api
 
-CMD exec gunicorn --bind :$PORT --workers 1 --threads 8 --timeout 0 main:app
+CMD exec gunicorn --bind :$PORT --workers 1 --threads 1 --timeout 0 main:app
