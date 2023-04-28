@@ -13,7 +13,8 @@ ENV DBT_DIR $dbt_project_name/case_study
 ENV DBT_PROFILES_DIR=$DBT_DIR/profiles/
 ENV GOOGLE_APPLICATION_CREDENTIALS=/usr/app/auth/gcp-service-account.json
 ENV PORT 8080
+ENV HOST 0.0.0.0
 
 WORKDIR dbt_project_name/dbt_rest_api
 
-CMD ["python3", "-m" , "flask", "run", "--host=0.0.0.0"]
+CMD ["python3", "-m" , "flask", "run", "--host=$HOST", '--port=$PORT']
