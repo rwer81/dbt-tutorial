@@ -2,7 +2,7 @@ ARG dbt_project_name=case_study
 
 FROM python:3.10-alpine
 
-RUN adduser dbt &&\
+RUN adduser --disabled-password dbt &&\
     mkdir /dbt &&\
     mkdir /rest_api &&\
     chown dbt:dbt /dbt &&\
