@@ -16,4 +16,10 @@ You can change repository name and location
 
 Configure Docker to use the Google Cloud CLI to authenticate requests to Artifact Registry.
 
+burayı düzenle 
+docker build -t us-central1-docker.pkg.dev/erudite-flag-384915/my-docker-repo/dbt-case-study-img2:v01 .
+
 gcloud auth configure-docker us-central1-docker.pkg.dev
+
+docker push us-central1-docker.pkg.dev/erudite-flag-384915/my-docker-repo/dbt-case-study-img2:v01
+
