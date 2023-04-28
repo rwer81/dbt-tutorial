@@ -1,4 +1,4 @@
-
+IAM SETTING
 Store Docker container images in Artifact Registry
 
 if you are using Local shell, ensure docker and gcloud CLI are installed.  
@@ -23,3 +23,8 @@ gcloud auth configure-docker us-central1-docker.pkg.dev
 
 docker push us-central1-docker.pkg.dev/erudite-flag-384915/my-docker-repo/dbt-case-study-img2:v01
 
+gcloud run deploy dbt-commands \
+    --platform managed \
+    --region us-central1 \
+    --allow-unauthenticated \
+    --image us-central1-docker.pkg.dev/erudite-flag-384915/my-docker-repo/dbt-case-study-img:v1
