@@ -4,7 +4,7 @@ FROM python:3.10-alpine
 
 RUN adduser --disabled-password dbt &&\
     mkdir /dbt &&\
-    chown dbt:dbt /dbt &&\
+    chown dbt:dbt /dbt
 
 USER dbt
 
