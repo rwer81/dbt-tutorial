@@ -3,10 +3,10 @@ ARG dbt_project_name=case_study
 FROM python:3.10-alpine
 
 RUN adduser dbt &&\
-    mkdir /dbt &&\
-    mkdir /rest_api &&\
-    chown dbt:dbt /dbt &&\
-    chown dbt:dbt /rest_api &&\
+RUN mkdir /dbt &&\
+RUN mkdir /rest_api &&\
+RUN chown dbt:dbt /dbt &&\
+RUN chown dbt:dbt /rest_api &&\
 
 USER dbt
 
