@@ -1,2 +1,3 @@
 dbt-bigquery
 flask
+gunicorn
