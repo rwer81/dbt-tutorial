@@ -17,4 +17,4 @@ ENV HOST 0.0.0.0
 
 WORKDIR /$dbt_project_name/dbt_rest_api
 
-CMD ["python3", "app.py"]
+CMD ["python3", "main.py"]
