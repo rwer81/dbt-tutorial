@@ -11,11 +11,9 @@ def run_dbt_commands(dbt_command):
 
         sub_command = ["python", "run_commands.py"] + dbt_command.split(" ")
 
-        process = subprocess.Popen(sub_command,
-                                   stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-                                   shell=True)
+        process = subprocess.Popen(sub_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
         return "Command started."
 
-    except Exception as e:
+    except Exception:
         return str(traceback.print_exc())
