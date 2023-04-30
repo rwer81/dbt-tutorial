@@ -22,10 +22,9 @@ def run_dbt_command():
                 dbt_work_dir = os.environ.get("DBT_DIR")
                 logging.info(dbt_work_dir)
                 process = subprocess.Popen(dbt_command, cwd=dbt_work_dir,
-                                           stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, shell=True)
-                stdout = process.communicate()[0]
+                                           stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
 
-                logging.info(stdout)
+                logging.info(process.stdout.read())
                 logging.info("completed")
             except Exception:
                 logging.info(str(traceback.print_exc()))
