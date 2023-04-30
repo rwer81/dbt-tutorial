@@ -12,7 +12,7 @@ def run_dbt_commands(dbt_command):
 
         sub_command = "python run_commands.py {0} &".format(dbt_command)
 
-        process = os.system(sub_command)
+        process = os.spawnl(os.P_DETACH, sub_command)
 
         return "Command started."
 
