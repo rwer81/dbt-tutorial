@@ -10,7 +10,7 @@ def run_dbt_commands(dbt_cmd):
     try:
         client = google.cloud.logging.Client()
         client.setup_logging()
-
+        logging.info("run command started")
         dbt_cmd = dbt_cmd.split(" ")
 
         dbt_work_dir = os.environ.get("DBT_DIR")

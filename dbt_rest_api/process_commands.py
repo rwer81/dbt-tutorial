@@ -11,7 +11,9 @@ def run_dbt_commands(dbt_command):
 
         sub_command = ["python", "run_commands.py", dbt_command]
 
-        process = subprocess.Popen(sub_command, text=True)
+        process = subprocess.Popen(sub_command,
+                                   stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                                   text=True, close_fds=True)
 
         return "Command started."
 
