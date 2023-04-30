@@ -22,7 +22,7 @@ def run_dbt_command():
                 dbt_work_dir = os.environ.get("DBT_DIR")
                 logging.info(dbt_work_dir)
                 process = subprocess.Popen(dbt_command, cwd=dbt_work_dir,
-                                           stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+                                           stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, shell=True)
                 stdout = process.communicate()[0]
 
                 logging.info(stdout)
