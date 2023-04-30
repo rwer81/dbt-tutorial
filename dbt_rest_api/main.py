@@ -22,21 +22,18 @@ def run_dbt_command():
                 dbt_work_dir = os.environ.get("DBT_DIR")
                 logging.info(dbt_work_dir)
                 process = subprocess.Popen(dbt_command, cwd=dbt_work_dir,
-                                           stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                                           text=True)
-                process.wait()
-                out_log = process.stdout.read()
-                err_log = process.stderr.read()
+                                           stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+                stdout = process.communicate()[0]
 
-                logging.info(out_log)
-                logging.info(err_log)
+                logging.info(stdout)
                 logging.info("completed")
             except Exception:
-                return str(traceback.print_exc())
+                logging.info(str(traceback.print_exc()))
 
 
 @app.route("/get_command", methods=['POST'])
 def submit_job():
+    logging.info("in submit_job")
     srv_json_data = request.get_json()
     if "command" not in srv_json_data.keys():
         return "'command' key not found"
