@@ -1,3 +1,4 @@
+import os
 import subprocess
 import traceback
 
@@ -9,11 +10,9 @@ def run_dbt_commands(dbt_command):
         dbt_command = dbt_command.strip()
         # more checks for commands
 
-        sub_command = ["python", "run_commands.py", dbt_command]
+        sub_command = "python run_commands.py {0} &".format(dbt_command)
 
-        process = subprocess.Popen(sub_command,
-                                   stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-                                   text=True, close_fds=True)
+        process = os.system(sub_command)
 
         return "Command started."
 
