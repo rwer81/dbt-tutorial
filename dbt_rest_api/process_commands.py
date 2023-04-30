@@ -13,11 +13,7 @@ def run_dbt_commands(dbt_command):
 
         process = subprocess.Popen(sub_command, text=True)
 
-        if not process.stderr.read():
-
-            return "Command started"
-        else:
-            process.stderr.read()
+        return process.stdout.read()
 
     except Exception as e:
         return str(traceback.print_exc())
