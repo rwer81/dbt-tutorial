@@ -16,7 +16,7 @@ def get_command():
 
     srv_json_data = request.get_json()
     logging.info(srv_json_data)
-
+    logging.info([[name, value] for name, value in os.environ.items()])
     try:
         requested_command = srv_json_data["command"]
     except KeyError:
