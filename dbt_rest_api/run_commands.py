@@ -7,7 +7,6 @@ import traceback
 
 
 def run_dbt_commands(dbt_cmd):
-    subprocess_log = open('./subprocess_logs.log', 'a')
     try:
         client = google.cloud.logging.Client()
         client.setup_logging()
@@ -15,8 +14,8 @@ def run_dbt_commands(dbt_cmd):
         dbt_cmd = dbt_cmd.split(" ")
 
         dbt_work_dir = os.environ.get("DBT_DIR")
-        print(dbt_cmd)
-        process = subprocess.Popen(dbt_cmd, cwd=r"C:\Users\SAHIN\Desktop\projects\dbt_works\case_study",
+        print(dbt_work_dir)
+        process = subprocess.Popen(dbt_cmd, cwd=dbt_work_dir,
                                    stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                                    text=True)
         process.wait()
