@@ -14,7 +14,8 @@ def run_dbt_commands(dbt_cmd):
         dbt_cmd = dbt_cmd.split(" ")
 
         dbt_work_dir = os.environ.get("DBT_DIR")
-        print(dbt_work_dir)
+        logging.info(dbt_work_dir)
+        logging.info(dbt_cmd)
         process = subprocess.Popen(dbt_cmd, cwd=dbt_work_dir,
                                    stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                                    text=True)
