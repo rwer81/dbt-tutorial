@@ -10,18 +10,17 @@ from flask import Flask, request
 
 app = Flask(__name__)
 
-client = google.cloud.logging.Client()
-client.setup_logging()
-
 
 def run_dbt_command():
+    logging.info("in run_dbt_command")
     with lock:
         while not cmd_queue.empty():
             try:
+
                 dbt_command = cmd_queue.get()
-                print(dbt_command)
+                logging.info(dbt_command)
                 dbt_work_dir = os.environ.get("DBT_DIR")
-                print(dbt_work_dir)
+                logging.info(dbt_work_dir)
                 process = subprocess.Popen(dbt_command, cwd=dbt_work_dir,
                                            stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                                            text=True)
@@ -31,9 +30,7 @@ def run_dbt_command():
 
                 logging.info(out_log)
                 logging.info(err_log)
-                print("completed")
-                print(out_log)
-                print(err_log)
+                logging.info("completed")
             except Exception:
                 return str(traceback.print_exc())
 
@@ -69,6 +66,9 @@ def welcome_page():
 
 
 if __name__ == '__main__':
+    client = google.cloud.logging.Client()
+    client.setup_logging()
+
     cmd_queue = queue.Queue()
     lock = threading.RLock()
     app.run(host=os.environ.get("HOST", "0.0.0.0"), port=int(os.environ.get("PORT", 8080)), threaded=False)
