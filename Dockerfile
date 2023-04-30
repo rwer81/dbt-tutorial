@@ -6,7 +6,7 @@ WORKDIR /home/dbt_works/
 
 RUN pip3 install --no-cache-dir -r requirements.txt
 
-ENV DBT_DIR /home/dbt_works/case_study/
+ENV DBT_DIR /home/dbt_works/case_study
 ENV DBT_PROFILES_DIR=$DBT_DIR/profiles/
 
 ENV PORT 8080
