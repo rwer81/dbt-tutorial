@@ -68,7 +68,7 @@ def welcome_page():
 if __name__ == '__main__':
     client = google.cloud.logging.Client()
     client.setup_logging()
-
+    logging.info("in maninnnnnnnnnnnnnn")
     cmd_queue = queue.Queue()
     lock = threading.RLock()
     app.run(host=os.environ.get("HOST", "0.0.0.0"), port=int(os.environ.get("PORT", 8080)), threaded=False)
