@@ -1,14 +1,14 @@
 case_study:
   outputs:
     dev:
-      dataset: snr_bupf
-      job_execution_timeout_seconds: 600
+      dataset: dbt_test
+      job_execution_timeout_seconds: 300
       job_retries: 1
-      location: europe-west6
+      location: us-central1
       method: oauth
       priority: interactive
-      project: snr-bupf-dev
-      threads: 6
+      project: erudite-flag-384915
+      threads: 1
       type: bigquery
   target: dev
 

@@ -1,4 +1,5 @@
 IAM SETTING
+cloud run service account
 Store Docker container images in Artifact Registry
 
 if you are using Local shell, ensure docker and gcloud CLI are installed.  

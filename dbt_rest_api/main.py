@@ -1,19 +1,21 @@
 import os
 import logging
+import google.cloud.logging
 from flask import Flask, request
 from process_commands import run_dbt_commands
 
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
 
 app = Flask(__name__)
+
+client = google.cloud.logging.Client()
+client.setup_logging()
 
 
 @app.route("/get_command", methods=['POST'])
 def get_command():
 
     srv_json_data = request.get_json()
-    logger.info(srv_json_data)
+    logging.info(srv_json_data)
 
     try:
         requested_command = srv_json_data["command"]
@@ -21,14 +23,14 @@ def get_command():
         return "<command> key not found"
 
     command_run_result = run_dbt_commands(requested_command)
-    logger.info(command_run_result)
+    logging.info(command_run_result)
 
     return command_run_result
 
 # service document
 
 
-@app.route("/hello_world")
+@app.route("/")
 def welcome_page():
     return "Welcome"
 

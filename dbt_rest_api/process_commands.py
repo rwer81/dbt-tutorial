@@ -1,21 +1,17 @@
 import subprocess
-import os
+import traceback
 
 
 def run_dbt_commands(dbt_command):
-    if not dbt_command.startswith("dbt "):
-        return "Not a DBT command"
+    try:
+        if not dbt_command.startswith("dbt "):
+            return "Not a DBT command"
+        dbt_command = dbt_command.strip()
 
-    dbt_work_dir = os.environ.get("DBT_DIR")
+        sub_command = "python run_commands.py {0}".format(dbt_command)
+        process = subprocess.Popen(sub_command, text=True)
 
-    result = subprocess.Popen([dbt_command], cwd=dbt_work_dir,
-                              stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                              text=True)
+        return "Command started"
 
-    #result = subprocess.run([dbt_command], #cwd=dbt_work_dir,
-    #                        stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, shell=True)
-
-    if result.returncode == 0:
-        return result.stdout
-    else:
-        return result.stderr
+    except Exception as e:
+        return str(traceback.print_exc())
