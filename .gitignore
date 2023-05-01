@@ -3,3 +3,4 @@
 /dbt_first_project/
 /erudite-flag-384915-da32da7056bd.json
 .dockerignore
+.idea/
