@@ -18,8 +18,12 @@ def submit_job():
         process = subprocess.Popen(validated_data, cwd=dbt_work_dir,
                                    stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
         process.wait()
+        run_result = process.stdout.read()
 
-        return jsonify("Command executed successfully. Result: " + process.stdout.read()), 200
+        if "Encountered an error" in run_result:
+            return jsonify({"code": 200, "name": "Dbt Error ", "description": run_result})
+        else:
+            return jsonify({"code": 200, "name": "Success", "description": run_result})
     else:
         return jsonify({"code": 400, "name": "BadRequest", "description": validated_data})
 
