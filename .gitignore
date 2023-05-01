@@ -1,6 +1,5 @@
 /venv/
-/case_study/logs/
-/dbt_first_project/
+/case_study_old/
 /erudite-flag-384915-da32da7056bd.json
 .dockerignore
 .idea/

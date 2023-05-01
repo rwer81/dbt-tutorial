@@ -1,0 +1,14 @@
+case_study:
+  outputs:
+    dev:
+      dataset: snr_bupf
+      job_execution_timeout_seconds: 600
+      job_retries: 1
+      location: europe-west6
+      method: oauth
+      priority: interactive
+      project: snr-bupf-dev
+      threads: 6
+      type: bigquery
+  target: dev
+
