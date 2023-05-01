@@ -72,6 +72,8 @@ If you don't have, install the gcloud CLI from https://cloud.google.com/sdk/docs
   - Execute `gcloud builds submit --region $GCP_REGION --project $PROJECT_ID --config cloudbuild.yaml`
 
 ## Test
+`export SERVICE_NAME="dbt-tutorial-run-service"`
+
 #### Confirm service is running
 `gcloud run services list \
     --platform managed \
