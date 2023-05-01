@@ -1,0 +1,44 @@
+steps:
+  # Install dependencies
+  - name: python
+    entrypoint: pip
+    args: ["install", "-r", "requirements.txt", "--user"]
+
+  # Run unit tests
+  - name: python
+    entrypoint: python
+    args: ["-m", "pytest", "--junitxml=${_IMAGE_NAME}_${_IMAGE_VERSION}_test_log.xml"]
+
+  # Docker Build
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t',
+           'us-central1-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_IMAGE_NAME}:${_IMAGE_VERSION}', '.']
+
+  # Docker push to Google Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push',  'us-central1-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_IMAGE_NAME}:${_IMAGE_VERSION}']
+
+  # Deploy to Cloud Run
+  - name: google/cloud-sdk
+    args: ['gcloud', 'run', 'deploy', '${_RUN_SERVICE_NAME}',
+           '--image=us-central1-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_IMAGE_NAME}:${_IMAGE_VERSION}',
+           '--region', 'us-central1', '--platform', 'managed', '--max-instances', '2',
+           '--allow-unauthenticated']
+
+# Save test logs to Google Cloud Storage
+artifacts:
+  objects:
+    location: gs://${_BUCKET_NAME}/
+    paths:
+      - ${_IMAGE_NAME}_${_IMAGE_VERSION}_test_log.xml
+
+# Store images in Google Artifact Registry
+images:
+  - us-central1-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_IMAGE_NAME}:${_IMAGE_VERSION}
+
+substitutions:
+  _ARTIFACT_REGISTRY_REPO: dbt-docker-repo
+  _RUN_SERVICE_NAME: dbt-tutorial-run-service
+  _IMAGE_NAME: dbt-tutorial-img
+  _IMAGE_VERSION: v1
+  _BUCKET_NAME: erudite-flag-384915_cloudbuild_tests

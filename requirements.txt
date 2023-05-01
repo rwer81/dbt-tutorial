@@ -1,3 +1,4 @@
 dbt-bigquery
 flask
 google-cloud-logging
+pytest

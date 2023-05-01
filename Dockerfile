@@ -12,7 +12,7 @@ ENV DBT_PROFILES_DIR=$DBT_DIR/profiles/
 ENV PORT 8080
 ENV HOST 0.0.0.0
 
-WORKDIR /home/dbt_works/dbt_rest_api
+WORKDIR /home/dbt_works
 
 CMD ["dbt"]
 CMD ["python3", "main.py"]

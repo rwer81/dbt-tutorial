@@ -1,31 +1,97 @@
-IAM SETTING
-cloud run service account
-Store Docker container images in Artifact Registry
+# Deployment
 
-if you are using Local shell, ensure docker and gcloud CLI are installed.  
-if docker not is installed, to install: 
-https://docs.docker.com/engine/install/ubuntu/ 
-if gcloud CLI is not installed, to install: 
+If you don't have, install the gcloud CLI from https://cloud.google.com/sdk/docs/install and git from https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
+
+#### Open command line and type to pull the repo.:
+
+- `git clone https://github.com/rwer81/dbt-tutorial.git`
+
+- `cd dbt_tutorial`
+
+#### Using command line
+
+- `gcloud auth login`
+
+- `gcloud config set project <your_gcp_project_name>`
+
+#### Set env
+- `export PROJECT_ID=$(gcloud config get-value project)`
+
+- `export GCP_REGION="<your_region>" `
 
 
-Create a Docker Repository in Google Cloud Artifact Registry
+#### Enable apis
 
-gcloud artifacts repositories create my-docker-repo --repository-format=docker \
---location=us-central1 --description="Docker repository"
+- <pre>gcloud services enable compute.googleapis.com \
+    artifactregistry.googleapis.com \
+    cloudbuild.googleapis.com 
+    storage.googleapis.com \
+    run.googleapis.com</pre>
 
-You can change repository name and location 
+#### Create a Docker Repository in Google Cloud Artifact Registry
+* You can change repo name
 
-Configure Docker to use the Google Cloud CLI to authenticate requests to Artifact Registry.
+`export REPO_NAME=dbt-docker-repo`
 
-burayı düzenle 
-docker build -t us-central1-docker.pkg.dev/erudite-flag-384915/my-docker-repo/dbt-case-study-img2:v01 .
+<pre>gcloud artifacts repositories create $REPO_NAME \
+    --repository-format=docker \
+    --location=$GCP_REGION \
+    --description="Docker repository"</pre>
 
-gcloud auth configure-docker us-central1-docker.pkg.dev
+## Option 1 - Set up with command by command
 
-docker push us-central1-docker.pkg.dev/erudite-flag-384915/my-docker-repo/dbt-case-study-img2:v01
+#### Configure auth
+`gcloud auth configure-docker ${GCP_REGION}-docker.pkg.dev`
 
-gcloud run deploy dbt-commands \
+### BUILD DOCKER 
+* You can change image, tag and service name
+
+`export IMAGE_NAME="dbt-tutorial-img"`
+
+`export TAG_NAME="v1"`
+
+`export SERVICE_NAME="dbt-tutorial-run-service"`
+
+
+#### Build and push image to artifact registry 
+<pre>gcloud builds submit \
+    --tag ${GCP_REGION}-docker.pkg.dev/${PROJECT_ID}/${REPO_NAME}/${IMAGE_NAME}:${TAG_NAME}</pre>
+
+#### Deploy app to Cloud Run
+* You can change max instance value
+
+<pre>gcloud run deploy $SERVICE_NAME \
     --platform managed \
-    --region us-central1 \
+    --region $GCP_REGION \
     --allow-unauthenticated \
-    --image us-central1-docker.pkg.dev/erudite-flag-384915/my-docker-repo/dbt-case-study-img:v1
+    --max-instances 2 \
+    --image ${GCP_REGION}-docker.pkg.dev/${PROJECT_ID}/${REPO_NAME}/${IMAGE_NAME}:${TAG_NAME}</pre>
+
+## Option 2- Set up from cloudbuild.yaml file (easier and includes additional tests)
+  - Open clouduild.yaml file modify 'substitutions' sections in the end of the file.
+  - Execute `gcloud builds submit --region <your_gcp_region_name> --project <your_gcp-project_name> --config cloudbuild.yaml`
+
+## Test
+#### Confirm service is running
+`gcloud run services list \
+    --platform managed \
+    --region $GCP_REGION`
+
+#### Test URL
+`export SVC_URL=$(gcloud run services describe $SERVICE_NAME --platform managed --region $GCP_REGION --format="value(status.url)")`
+
+`curl -X GET $SVC_URL`
+
+_IAM Notes:_
+
+_If you encounter permission issues, Cloud Build(xxxx@cloudbuild.gserviceaccount.com service account) requires Cloud Run Admin, Service Account User, Storage Viewer, Artifact Registry Writer permissions._
+
+# Usage
+
+POST
+
+`curl -d '{"command": "dbt list"}' -H "Content-Type: application/json" -X POST https://your_service_url/run_command`
+
+GET
+
+`curl -X GET https://your_service_url`

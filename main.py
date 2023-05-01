@@ -16,7 +16,7 @@ def submit_job():
         dbt_work_dir = os.environ.get("DBT_DIR")
 
         process = subprocess.Popen(validated_data, cwd=dbt_work_dir,
-                                       stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+                                   stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
         process.wait()
 
         return jsonify("Command executed successfully. Result: " + process.stdout.read()), 200
@@ -24,23 +24,27 @@ def submit_job():
         return jsonify({"code": 400, "name": "BadRequest", "description": validated_data})
 
 
-# service document
-
 @app.route("/")
 def welcome_page():
-    return jsonify("Welcome")
+    return jsonify({"code": 200, "name": "Success", "description": "Welcome. Service is alive"})
 
 
 def validate_command(json_data):
 
-    requested_command = json_data["command"]
-    requested_command = requested_command.strip()
-
-    if "command" not in json_data.keys() or len(json_data.keys()) != 1 or not isinstance(requested_command, str):
+    if "command" not in json_data.keys() or len(json_data.keys()) != 1:
         response = '"command" key not found or misconfigured request. '\
                     'Example usage: {"command": "dbt test"}'
+        return response
 
-    elif any(multi_cmd in requested_command for multi_cmd in ["&&", ";", "||"]):
+    requested_command = json_data["command"]
+
+    if not isinstance(requested_command, str):
+        response = "Commands can only be strings"
+        return response
+
+    requested_command = requested_command.strip()
+
+    if any(multi_cmd in requested_command for multi_cmd in ["&&", ";", "||"]):
         response = "Multiple commands not allowed"
 
     elif not requested_command.startswith("dbt "):
@@ -64,5 +68,4 @@ def handle_exception(e):
 
 
 if __name__ == '__main__':
-
     app.run(host=os.environ.get("HOST", "0.0.0.0"), port=int(os.environ.get("PORT", 8080)), threaded=False)
