@@ -59,7 +59,7 @@ def validate_command(json_data):
         - start with 'dbt '(with space)
 
     :param json_data: Json object that includes API post body json data
-    :return:
+    :return: str or list obj.
     """
     if "command" not in json_data.keys() or len(json_data.keys()) != 1:
         response = '"command" key not found or misconfigured request. '\
