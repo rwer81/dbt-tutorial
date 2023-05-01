@@ -69,7 +69,7 @@ If you don't have, install the gcloud CLI from https://cloud.google.com/sdk/docs
 
 ## Option 2- Set up from cloudbuild.yaml file (easier and includes additional tests)
   - Open clouduild.yaml file modify 'substitutions' sections in the end of the file.
-  - Execute `gcloud builds submit --region <your_gcp_region_name> --project <your_gcp-project_name> --config cloudbuild.yaml`
+  - Execute `gcloud builds submit --region $GCP_REGION --project $PROJECT_ID --config cloudbuild.yaml`
 
 ## Test
 #### Confirm service is running
