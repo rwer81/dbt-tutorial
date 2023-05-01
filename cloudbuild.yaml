@@ -41,4 +41,4 @@ substitutions:
   _RUN_SERVICE_NAME: dbt-tutorial-run-service
   _IMAGE_NAME: dbt-tutorial-img
   _IMAGE_VERSION: v1
-  _BUCKET_NAME: erudite-flag-384915_cloudbuild_tests
+  _BUCKET_NAME: <your_bucket_name>_cloudbuild_tests
