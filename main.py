@@ -8,16 +8,28 @@ app = Flask(__name__)
 
 @app.route("/run_command", methods=['POST'])
 def submit_job():
+    """
+    Get and run DBT command. Before run checks if it has correct structure.
+    Execute command and wait for result.
 
+    :return: Json Response: if valid command return Dbt execution result. Else command validation result.
+    """
+    # Get post data
     service_json_data = request.get_json()
 
+    # Validate post data and command if it is safe and has correct structure
     validated_data = validate_command(service_json_data)
+
+    # If it is suitable to run validation result should be list of command strings
     if isinstance(validated_data, list):
         dbt_work_dir = os.environ.get("DBT_DIR")
 
+        # Create a subprocess to run executable dbt command
         process = subprocess.Popen(validated_data, cwd=dbt_work_dir,
                                    stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
         process.wait()
+
+        # Handle the execution result
         run_result = process.stdout.read()
 
         if "Encountered an error" in run_result:
@@ -30,11 +42,25 @@ def submit_job():
 
 @app.route("/")
 def welcome_page():
+    """
+    Simple Get request.
+    :return: Json Response.
+    """
     return jsonify({"code": 200, "name": "Success", "description": "Welcome. Service is alive"})
 
 
 def validate_command(json_data):
+    """
+    Check and validate incoming API post data to be sure it is a dbt command and safe to run.
+    A valid command should:
+        - have only one key that is 'command'
+        - be string not a list or number etc.
+        - not include any multiple command execution symbol
+        - start with 'dbt '(with space)
 
+    :param json_data: Json object that includes API post body json data
+    :return:
+    """
     if "command" not in json_data.keys() or len(json_data.keys()) != 1:
         response = '"command" key not found or misconfigured request. '\
                     'Example usage: {"command": "dbt test"}'
