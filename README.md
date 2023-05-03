@@ -1,3 +1,5 @@
+# Deploy DBT Docker to Artifact Registry and  Run with Cloud Run
+
 # Deployment
 
 If you don't have, install the gcloud CLI from https://cloud.google.com/sdk/docs/install and git from https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
