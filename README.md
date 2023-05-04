@@ -1,4 +1,4 @@
-# Deploy DBT Docker to Artifact Registry and  Run with Cloud Run
+# Deploy DBT Docker to Artifact Registry and  Run with Cloud Run as a REST API
 
 # Deployment
 
